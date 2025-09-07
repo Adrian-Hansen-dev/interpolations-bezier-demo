@@ -1,0 +1,25 @@
+{
+  "name": "interpolations-bezier-demo",
+  "homepage": "https://Adrian-Hansen-dev.github.io/interpolations-bezier-demo/",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
+  },
+
+  "dependencies": {
+    "mathjs": "^14.7.0",
+    "three": "^0.180.0",
+    "troika-three-text": "^0.52.4",
+    "gh-pages": "^6.3.0"
+  },
+  "devDependencies": {
+    "vite": "6.3.4"
+  }
+}

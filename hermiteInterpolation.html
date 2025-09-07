@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hermite-Interpolation</title>
+    <link rel="stylesheet" href="src/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+</head>
+<body>
+<nav class="navbar navbar-expand-xl navbar-light bg-light">
+    <a class="navbar-brand" href="#">CG3</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item ">
+                <a class="nav-link selected" href="interpolateByPolynomial.html">Interpolationspolynom<span
+                        class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="rungeFunction.html">Runge Funktion</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="hermiteInterpolation.html">Hermite-Interpolation</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="index.html">2D-Bézier-Kurve & De Castlejau</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="container-fluid" id="header">
+    <div class="row justify-content-center align-items-center">
+        <h1 class="center">Hermite-Interpolation</h1>
+    </div>
+</div>
+<div class="d-flex justify-content-center container-fluid mt-5 ">
+    <div class="col-md-8">
+        <h2>Hermite-Interpolation</h2>
+        <p>Das folgende Demoprogramm erklärt, wie sich Punkte mit Hilfe der Hermite-Interpolation interpolieren
+            lassen.</p>
+        <br/>
+        <p><b>Der Unterschied zur Interpolation durch Polynome:</b></p>
+        <p>Es wird eine Funktion gesucht wird die nicht nur durch die vorgegebenen <span
+                class="blue">Stützstellen</span> läuft, sondern an den Stützstellen auch die vorgegebene <span
+                class="orange">Ableitung</span> annimmt.</p>
+        <p><b>Gegeben:</b> Disjunkte Stützstellen \( p_i = \) (\(x_i\) | \(f_i\)) für \(i=0, ...,n\) mit jeweils \(
+            n_i-1 \) Ableitungswerten <span class="orange">\( m_i \)</span>. </p>
+        <div class="card">
+            <div class="card-header">Als Beispiel wählen wir 2 disjunkte Stützstellen \( p_{0-1}\) mit jeweils einer
+                Ableitung \( m_{0-1}\):
+            </div>
+            <div class="card-body">
+                <ul>
+                    <li><span class="blue">\( p_0 \)</span> ( 0 | 2 )</li>
+                    <li><span class="blue">\( p_1 \)</span> ( 1 | 3 )</li>
+                    <li><span class="orange">\( m_0 \)</span>( 0 | 4 )</li>
+                    <li><span class="orange">\( m_1 \)</span> ( 1 | -2 )</li>
+                </ul>
+            </div>
+        </div>
+        <br/>
+        <p><b>Gesucht:</b> Ein Polynom, dass durch die Stützstellen \( p_i\) verläuft und jeweils die richige Ableiung
+            <span class="orange">\( m_i \)</span> annimmt.
+            Der Grad des Polynoms wird durch die (Summe der gegebenen Stützstellen und Ableitungen)-1 bestimmt.</p>
+        <p>\[ p(x)= a_0+a_1x^1+a_2x^2+...+a_nx^{n-1} \]</p>
+        <div class="card">
+            <div class="card-header">In unserem Beispiel ist sieht das gesuchte Polynom mit Grad=3 wie folgt aus:</div>
+            <div class="card-body">
+                <p class="blue">\[ p(x)= a_0+a_1x^1+a_2x^2+a_3x^3 \]</p>
+                <p class="orange">\[ p'(x)= a_1+2a_2x^1+3a_3x^2 \]</p>
+            </div>
+        </div>
+        <br/>
+        <p>Anschließend kann man die die Funktion und Ableitung in Form einer Matrix darstellen.</p>
+        <p>\[\left[\begin{array}{cccc}
+            1 & x_0 & x_0^2 & x_0^3 \\
+            0 & 1 & 2 x_0 & 3 x_1^2 \\
+            1 & x_1 & x_1^2 & x_1^3 \\
+            0 & 1 & 2 x_1 & 3 x_1^2
+            \end{array}\right] \cdot \left[\begin{array}{cccc}
+            a_0 \\
+            a_1 \\
+            a_2 \\
+            a_3
+            \end{array}\right] = \left[\begin{array}{cccc}
+            f_0 \\
+            f_1 \\
+            f'_0 \\
+            f'_1
+            \end{array}\right]\]</p>
+        <p>Wenn man nun wie bei der Interpolation durch Polynome wieder die Inverse der Matrix auf beiden Seiten
+            multipliziert erhählt man der gesuchten Koeffizienten.</p>
+        <p>\[ \left[\begin{array}{cccc}
+            a_0 \\
+            a_1 \\
+            a_2 \\
+            a_3
+            \end{array}\right] = A^{-1} \cdot \left[\begin{array}{cccc}
+            f_0 \\
+            f_1 \\
+            f'_0 \\
+            f'_1
+            \end{array}\right]\]</p>
+        <div class="card">
+            <div class="card-header">Als Ergebnis erhält man das interpolierte Polynom mit den gesuchten
+                Koeffizienten.
+            </div>
+            <div class="card-body">
+                <p id="resultPolynomial" class="green"></p>
+            </div>
+        </div>
+        <br/>
+        <div class="card">
+            <div class="card-header"><b>Hermite-Interpolation</b></div>
+            <div class="card-body d-flex justify-content-center">
+                <canvas class="canvas" id="hInterpolation"></canvas>
+            </div>
+        </div>
+        <br/>
+        <h3>Zusammenhang mit Basisfunktionen</h3>
+        <p>Die Basisfunktion lassen sich aus der Multiplikation der Inverse den mit den Interpolations- und
+            Ableitungswerten bestimmen.</p>
+        <p>\[ A^{-1} \cdot \left[\begin{array}{cccc}
+            f_0 \\
+            f_1 \\
+            f'_0 \\
+            f'_1
+            \end{array}\right]\]</p>
+        <p>Aus der Multiplikation und anschließendem Umstellen ergibt sich das folgende Polynom: </p>
+        <p><span>\( p(x)= \) </span>
+            <span class="green">\( (2x^3-3x^2+1) \) </span>
+            <span>\( p_0+ \) </span>
+            <span class="orange">\( (-2x^3+3x^2) \)</span>
+            <span>\( p_1+ \) </span>
+            <span class="blue">\( (x^3-2x^2+x) \)</span>
+            <span>\( m_0+ \) </span>
+            <span class="red">\( (x^3-x^2) \)</span>
+            <span>\( m_1+ \) </span></p>
+        <br/>
+        <div class="d-flex flex-row align-items-start">
+            <div class="card">
+                <div class="card-header"><b>Basisfunktionen</b></div>
+                <div class="card-body d-flex justify-content-center">
+
+                    <canvas class="canvas" id="bFunction"></canvas>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <p class="green">\( H_0(x) = 2x^3-3x^2+1 \) </p>
+                    <p class="orange">\( H_1(x) = -2x^3+3x^2 \)</p>
+                    <p class="blue">\( H_0'(x) = x^3-2x^2+x \)</p>
+                    <p class="red">\( H_1'(x) = x^3-x^2 \)</p>
+                </div>
+            </div>
+        </div>
+        <br/>
+        <div class="card">
+            <div class="card-header"><b>Was hat die Basisfunktion für eine Bedeutung für die Kurve?</b></div>
+            <div class="card-body d-flex justify-content-center">
+                <p> Die Basisfunktionen stellen den Einfluss dar, den die gegebenen Punkte und Ableitungen auf die letzendliche Kurve haben.
+                    <span class="green">\( H_0(x) \)</span> und <span class="orange">\( H_1(x) \)</span> bestimmen an den Werten 0 und 1 zu 100% die Position der Kurve.
+                Die Werte dazwischen werden durch ein Mittel aus den verschiedenen Einflüssen von Ableitungen und Punkten bestimmt.
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--scripts-->
+<script type="module" src="src/javascript/hermiteInterpolation.js"></script>
+<script type="module" src="src/javascript/basistransformation.js"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script>
+    MathJax = {
+        tex: {
+            packages: ['base'],        // extensions to use
+            inlineMath: [              // start/end delimiter pairs for in-line math
+                ['\\(', '\\)']
+            ],
+            displayMath: [             // start/end delimiter pairs for display math
+                ['$$', '$$'],
+                ['\\[', '\\]']
+            ],
+            processEscapes: true,      // use \$ to produce a literal dollar sign
+            processEnvironments: true, // process \begin{xxx}...\end{xxx} outside math mode
+            processRefs: true,         // process \ref{...} outside of math mode
+            digits: /^(?:[0-9]+(?:\{,\}[0-9]{3})*(?:\.[0-9]*)?|\.[0-9]+)/,
+            // pattern for recognizing numbers
+            tags: 'none',              // or 'ams' or 'all'
+            tagSide: 'right',          // side for \tag macros
+            tagIndent: '0.8em',        // amount to indent tags
+            useLabelIds: true,         // use label name rather than tag for ids
+            maxMacros: 1000,           // maximum number of macro substitutions per expression
+            maxBuffer: 5 * 1024,       // maximum size for the internal TeX string (5K)
+            baseURL:                   // URL for use with links to tags (when there is a <base> tag in effect)
+                (document.getElementsByTagName('base').length === 0) ?
+                    '' : String(document.location).replace(/#.*$/, '')
+        }
+    };
+</script>
+</body>
+</html>

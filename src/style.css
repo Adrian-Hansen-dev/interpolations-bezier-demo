@@ -1,0 +1,39 @@
+#header {
+    background-image: url(bilder/qtpSIw.jpg);
+    text-align: center;
+    color: white;
+    height: 100px;
+    display: flex;
+    justify-content: center
+}
+
+.orange{
+    color: #f3722c;
+}
+.green{
+    color: #43aa8b;
+}
+.blue{
+    color: #277da1;
+}
+.red{
+    color: #f94144;
+}
+
+#green {
+    color: green;
+    font-weight: bold;
+    
+}
+
+#blue {
+    color: blue;
+    font-weight: bold;
+    
+}
+
+#red {
+    color: red;
+    font-weight: bold;
+}
+
