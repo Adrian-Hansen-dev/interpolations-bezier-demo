@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<!--Boostrap Styling -->
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+		<meta charset="utf-8">
+		<title>CG3-Abgabe</title>
+		<style>
+			body { margin: 0; }
+		</style>
+		<script type="module" crossorigin src="/interpolations-bezier-demo/assets/index-Cf2ApG3w.js"></script>
+		<link rel="stylesheet" crossorigin href="/interpolations-bezier-demo/assets/index-DTagVfz9.css">
+	</head>
+	<body>
+	<nav class="navbar navbar-expand-xl navbar-light bg-light">
+		<a class="navbar-brand" href="#">CG3</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+				aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarNav">
+			<ul class="navbar-nav">
+				<li class="nav-item ">
+					<a class="nav-link selected" href="interpolateByPolynomial.html">Interpolationspolynom<span class="sr-only">(current)</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="rungeFunction.html">Runge Funktion</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="hermiteInterpolation.html">Hermite-Interpolation</a>
+				</li>
+				<li class="nav-item active">
+					<a class="nav-link" href="index.html">2D-Bézier-Kurve & De Castlejau</a>
+				</li>
+			</ul>
+		</div>
+	</nav>
+
+		<!--Boostrap Scripts -->
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+		<div class="container-fluid" id="header">
+			<div class="row justify-content-center align-items-center">
+				<h1 class="center">2D-Bézier-Kurve & De Castlejau</h1>
+			</div>
+		</div>
+		
+
+		<div class="container-fluid mt-5" name="Bezier-Curve">
+			<div class="row">
+			<div class="col-md-3"></div>
+			<div class="col-md-6">
+			<h2>Bezier-Kurve</h2>
+			<br>
+			<p>Eine Bezier-Kurve ist eine parametrische Kurve, deren Verlauf durch 
+			bestimmte Kontrollpunkte gegeben ist b0, b1 ... bn. Der erste und letzte 
+		    Kontrollpunkt sind die jeweiligen Endpunkte der Kurve, die Zwischenpunkte 
+		    liegen dabei nicht auf der Kurve und wirken sich auf den Kurvenverlauf aus.
+			Die Basis die von einer Bezier-Kurve verwendet wird sin die Bernsteinpolynome,
+			in unserem Beispiel von Grad 3. Dadurch hat eine Bezier-Kurve dieses als ihre
+			Gewichtsfunktion und weißt folgende Eigenschaften auf</p>
+			<ul>
+				<li>Partion der 1</li>
+				<li>Nur Zahlen größer als 0 werden beachtet</li>
+				<li>Für t = 0 liegt die Kurve im Punkt b0</li>
+				<li>Für t = 1 liegt die Kurve im Punkt b1</li>
+				<li>In der ersten Hälfte der Bezierkurve ist der Wert von b1(t) am 
+					größten, die Kurve wird zu b1 hingezogen
+				</li>
+				<li>In der zweiten Hälfte der Bezierkurve ist der Wert von b2(t) am 
+					größten, die Kurve wird zu b2 hingezogen
+				</li>
+			</ul>
+
+			<div class="row justify-content-center">
+				<div class="col-md-5">
+					<h5 class="text-center">b0</h5>
+					<form class="p-3">
+						<div class="form-row">
+						  <div class="col">
+
+							<input type="number" id="p1x" class="form-control" min="0" max="600" placeholder="X-Coordinate">
+						  </div>
+						  <div class="col">
+							<input type="number" id="p1y" class="form-control" min="0" max="400" placeholder="Y-Coordinate">
+						  </div>
+						</div>
+					  </form>
+
+					  <h5 class="text-center">b1</h5>
+					<form class="p-3">
+						<div class="form-row">
+						  <div class="col">
+							<input type="number" id="p2x" class="form-control" min="0" max="600" placeholder="X-Coordinate">
+						  </div>
+						  <div class="col">
+							<input type="number" id="p2y" class="form-control" min="0" max="400" placeholder="Y-Coordinate">
+						  </div>
+						</div>
+					  </form>
+
+				</div>
+				<div class="col-md-5">
+					<h5 class="text-center">b2</h5>
+					<form class="p-3">
+						<div class="form-row">
+						  <div class="col">
+							<input type="number" id="p3x" class="form-control" min="0" max="600" placeholder="X-Coordinate">
+						  </div>
+						  <div class="col">
+							<input type="number" id="p3y" class="form-control" min="0" max="400" placeholder="Y-Coordinate">
+						  </div>
+						</div>
+					  </form>
+
+					  <h5 class="text-center">b3</h5>
+					<form class="p-3">
+						<div class="form-row">
+						  <div class="col">
+							<input type="number" id="p4x" class="form-control" min="0" max="600" placeholder="X-Coordinate">
+						  </div>
+						  <div class="col">
+							<input type="number" id="p4y" class="form-control" min="0" max="400" placeholder="Y-Coordinate">
+						  </div>
+						</div>
+					  </form>
+
+				</div>
+				<div class="col-md-3">
+
+					
+					
+				</div>
+			</div>
+
+			<div class="d-flex justify-content-center mt-2">
+				<canvas id="cubicrBezierCurve" width="600" height="400" style="border:1px solid"></canvas>
+			</div>
+			<div class="d-flex justify-content-center mt-2">
+				<label for="parametert">Parameter t</label>
+			<input  id="parametert" type="range" class="form-range"  step="0.01" min="0" max="1"  value="0.25" onchange="updateTextInput(this.value)">
+			<input type="text" id="textInput" value="">
+			</div>
+			<div class="d-flex justify-content-center mt-4">
+				<button type="submit" class="btn btn-primary mr-3" onclick="main()">Bezier-Kurve</button>
+				<button type="submit" class="btn btn-primary" onclick="callDrawBezier()">Zwischenpunkte</button> 
+				<button type="submit" class="btn btn-primary ml-3" onclick="clearCanvas()">Clear Canvas</button> 
+			</div>
+			</div>
+			<div class="col-md-3"></div>
+		</div>
+
+		<div class="container-fluid mt-5" name="Description_Castlejau">
+			<div class="row">
+			<div class="col-md-3"></div>
+			<div class="col-md-6">
+			<h2>de Castlejau-Algorithmus</h2>
+			<br>
+			<p>Der de Castlejau-Algorithmus ist eine sehr effiziente und numerische stabile 
+			   Methode einen Punkt P auf einer Bezierkurve in einem Intervall t[0,1] zu berechnen. 
+			   Die Gewichtung von t teilt dabei die Strecke von 2 Kontrollpunkten im Radius t:1-t ein.
+			   Die Funktionsweise vom de Castlejau-Algorithmus ist dabei die folgende, von den gegebenen
+			   Kontrollpunkten werden durch Lineare Interpolation, Zwischenpunkte bestimmt. Dieses Verfahren
+			   wird so lange rekursiv durch geführt bis nur noch ein Punkt vorhanden ist. Nach der 1.ten 
+			   Iteration erhält man bei unserem Beispiel 3 Zwischenpunkte (<span id="green">hier grün dargestellt</span>), 
+			   diese werden nun auch wieder im Radius t:1-t geteilt, es ergeben sich 2 Zwischenpunkte
+			   (<span id="blue">hier blau dargestellt</span>). Nach einer weiteren Iteration erhält man nun einen Punkt(t) der auf der Bezierkurve liegt. Iteriert
+			   man nun über das Intervall t[0,1] und verbindet die hierbei enstehenden Punkte erhält man eine 
+			   Bezier-Kurve (<span id="red">hier in rot dargestellt</span>).
+			</p>
+
+			<div>
+				<canvas id="cubicBezierCurve"></canvas>
+			</div>
+			</div>
+			<div class="col-md-3"></div>
+		</div>
+
+		<div class="container-fluid  mt-5" name="Bernsteinpolynomials">
+			<div class="row">
+			<div class="col-md-3"></div>
+			<div class="col-md-6">
+			<h2>Zusammenhang de-Castlejau-Algorithmus und kubischen Bernsteinpolynomen</h2>
+			<br>
+			<p>Wie der de-Castlejau-Algorithmus, sind die Bernsteinpolynome ein Weg um den Verlauf einer
+				Bezier-Kurve zu ermitteln. Bei gegebenen Kontrollpunkten und einen Parameter t erhält man
+				identische Ergebnisse egal welche Methode man verwendet. Da die Auswertung der Bernsteinpolynome
+				einen höheren Rechenaufwand benötigt wird die Methode des de-Castlejau bevorzugt. Der 
+				De-Castlejau-Algorithmus lässt sich aus den Bernsteinpolynomen ableiten, er ist also 
+				die rekursive Berechnung der Bernsteinpolynome. Durch  Iteration der gegebenen Kontrollpunkte <br> <br>
+				<span class="d-flex justify-content-center">
+					\(b0(t) = b0, b1(t) = b1, b2(t) = b2, b3(t) = b3\)
+				</span>
+				<br> ergeben sich die Bernsteinpolynome 3.Grades <br> <br>
+				<span class="d-flex justify-content-center">
+					\((1-t)^3 * b0 + 3 * t * (1-t)^2 + b1 + 3 * t^2 * (1-t) * b2 + t^3 * b3\)
+				</span>
+				<br>
+				Wenn man nun die gegebenen Kontrollpunkte in die einzelnen Basis-Bernsteinpolynome einsetzt und
+				diese dann addiert erhält man auch wieder einen Punkt P(t) im Bereich t[0,1] der auf der 
+				gewünschten Bezier-Kurve liegt <br>
+				Die einzelne Bernsteinpolynome sind:
+				<div class="d-flex justify-content-center">
+					<ul>
+						<li>b0 = \((1-t)^3\)</li>
+						<li>b1 = \(3 * t * (1-t)^2\)</li>
+						<li>b2 = \(3 * t^2 * (1-t)\)</li>
+						<li>b3 = \(t^3\)</li>
+					</ul>
+				</div>
+
+			</p>
+			
+
+			<div class="d-flex justify-content-center mt-2">
+				<canvas id="bernsteinpolynomials" width="600" height="400" style="border:1px solid"></canvas>
+			</div>
+			<div class="d-flex justify-content-center mt-2">
+				<label for="t">Parameter t</label>
+			<input  id="bt" type="range" class="form-range"  step="0.01" min="0" max="1"  value="0.5" onchange="updateTextInput2(this.value)">
+			<input type="text" id="textInput2" value="" placeholder="0.50">
+			</div>
+			</div>
+			<div class="col-md-3"></div>
+		</div>
+
+		</div>
+			
+		</div>
+
+		<div class="d-flex justify-content-center mt-4">
+			<button type="submit" class="btn btn-primary mr-3" onclick=" callBernsteinPolynomial()">Bernsteinpolynome</button> 
+			<button type="submit" class="btn btn-primary" onclick=" clearSecondCanvas()">Clear Canvas</button> 
+		</div>
+
+		<div class="d-flex justify-content-center mt-5">
+		</div>
+
+		<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script>
+    MathJax = {
+        tex: {
+            packages: ['base'],        // extensions to use
+            inlineMath: [              // start/end delimiter pairs for in-line math
+                ['\\(', '\\)']
+            ],
+            displayMath: [             // start/end delimiter pairs for display math
+                ['$$', '$$'],
+                ['\\[', '\\]']
+            ],
+            processEscapes: true,      // use \$ to produce a literal dollar sign
+            processEnvironments: true, // process \begin{xxx}...\end{xxx} outside math mode
+            processRefs: true,         // process \ref{...} outside of math mode
+            digits: /^(?:[0-9]+(?:\{,\}[0-9]{3})*(?:\.[0-9]*)?|\.[0-9]+)/,
+            // pattern for recognizing numbers
+            tags: 'none',              // or 'ams' or 'all'
+            tagSide: 'right',          // side for \tag macros
+            tagIndent: '0.8em',        // amount to indent tags
+            useLabelIds: true,         // use label name rather than tag for ids
+            maxMacros: 1000,           // maximum number of macro substitutions per expression
+            maxBuffer: 5 * 1024,       // maximum size for the internal TeX string (5K)
+            baseURL:                   // URL for use with links to tags (when there is a <base> tag in effect)
+                (document.getElementsByTagName('base').length === 0) ?
+                    '' : String(document.location).replace(/#.*$/, '')
+        }
+    };
+</script>
+		
+	
+
+</div>
+	</body>
+</html>
