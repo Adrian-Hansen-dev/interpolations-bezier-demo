@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
 export default defineConfig({
-    base: "/interpolations-bezier-demo",
+    base: "/interpolations-bezier-demo/",
 
     rollupOptions: {
         input: {
